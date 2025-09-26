@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - UNIMED Past Questions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .user-info h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+        }
+
+        .user-info p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card p {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .years-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .year-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .year-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(52, 152, 219, 0.4);
+        }
+
+        .year-card.recent {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #3498db;
+        }
+
+        .stat-value {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: #2c3e50;
+            display: block;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-section {
+            margin-top: 30px;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+
+        .score-info {
+            flex: 1;
+        }
+
+        .score-details {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .score-value {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .score-percentage {
+            background: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9em;
+        }
+
+        .no-scores {
+            text-align: center;
+            color: #7f8c8d;
+            padding: 40px;
+            font-style: italic;
+        }
+
+        .subject-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .subject-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .subject-name {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .subject-score {
+            color: #27ae60;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 20px;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .years-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="user-info">
+                <h1>Welcome back, <span id="userName">Student</span>! 👋</h1>
+                <p>Ready to ace your UNIMED Post-UTME? Let's continue your preparation!</p>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Practice Tests Card -->
+            <div class="card">
+                <h3>📚 Practice Tests</h3>
+                <p>Select a year to start practicing with real UNIMED past questions:</p>
+                <div class="years-grid">
+                    <div class="year-card recent" onclick="startTest('2022')">2022</div>
+                    <div class="year-card" onclick="startTest('2021')">2021</div>
+                    <div class="year-card" onclick="startTest('2020')">2020</div>
+                    <div class="year-card" onclick="startTest('2019')">2019</div>
+                    <div class="year-card" onclick="startTest('2018')">2018</div>
+                    <div class="year-card" onclick="startTest('2017')">2017</div>
+                    <div class="year-card" onclick="startTest('2016')">2016</div>
+                    <div class="year-card" onclick="startTest('2015')">2015</div>
+                </div>
+            </div>
+
+            <!-- Progress Overview Card -->
+            <div class="card">
+                <h3>📊 Your Progress</h3>
+                <p>Track your performance and improvement over time:</p>
+                <div class="stats">
+                    <div class="stat-card">
+                        <span class="stat-value" id="testsTaken">0</span>
+                        <span class="stat-label">Tests Taken</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="averageScore">0%</span>
+                        <span class="stat-label">Average Score</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value" id="bestScore">0%</span>
+                        <span class="stat-label">Best Score</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject Analysis Card -->
+            <div class="card">
+                <h3>🎯 Subject Analysis</h3>
+                <p>Your performance across different subjects:</p>
+                <div id="subjectAnalysis">
+                    <div class="no-scores">Take tests to see your subject-wise performance</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Scores Card -->
+        <div class="card">
+            <h3>📈 Recent Test Scores</h3>
+            <div class="progress-section" id="recentScores">
+                <div class="no-scores">No tests taken yet. Start practicing to see your progress!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000/api';
+
+        // Check authentication
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        if (!token) {
+            window.location.href = 'login.html';
+            throw new Error('No authentication token found');
+        }
+
+        // Display user info
+        document.getElementById('userName').textContent = user.name || 'Student';
+
+        // Load user progress
+        async function loadProgress() {
+            try {
+                const response = await fetch(`${API_URL}/scores`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch scores');
+                }
+                
+                const data = await response.json();
+                
+                if (data.success && data.scores.length > 0) {
+                    const scores = data.scores;
+                    
+                    // Update basic stats
+                    document.getElementById('testsTaken').textContent = scores.length;
+                    
+                    const average = scores.reduce((sum, score) => sum + (score.score/score.total)*100, 0) / scores.length;
+                    document.getElementById('averageScore').textContent = `${average.toFixed(1)}%`;
+                    
+                    const best = Math.max(...scores.map(score => (score.score/score.total)*100));
+                    document.getElementById('bestScore').textContent = `${best.toFixed(1)}%`;
+
+                    // Display recent scores (last 5)
+                    const recentScores = scores.slice(-5).reverse();
+                    document.getElementById('recentScores').innerHTML = recentScores.map(score => `
+                        <div class="score-item">
+                            <div class="score-info">
+                                <strong>${score.year} - ${score.subject}</strong>
+                                <div style="color: #7f8c8d; font-size: 0.9em;">
+                                    ${new Date(score.date).toLocaleDateString()}
+                                </div>
+                            </div>
+                            <div class="score-details">
+                                <span class="score-value">${score.score}/${score.total}</span>
+                                <span class="score-percentage">${((score.score/score.total)*100).toFixed(1)}%</span>
+                            </div>
+                        </div>
+                    `).join('');
+
+                    // Calculate subject-wise performance
+                    const subjectPerformance = calculateSubjectPerformance(scores);
+                    displaySubjectAnalysis(subjectPerformance);
+                    
+                } else {
+                    // No scores yet
+                    document.getElementById('recentScores').innerHTML = `
+                        <div class="no-scores">No tests taken yet. Click on a year above to start practicing!</div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading progress:', error);
+                document.getElementById('recentScores').innerHTML = `
+                    <div class="no-scores" style="color: #e74c3c;">Error loading progress data</div>
+                `;
+            }
+        }
+
+        function calculateSubjectPerformance(scores) {
+            const subjects = {};
+            
+            scores.forEach(score => {
+                if (!subjects[score.subject]) {
+                    subjects[score.subject] = { totalScore: 0, totalQuestions: 0, tests: 0 };
+                }
+                subjects[score.subject].totalScore += score.score;
+                subjects[score.subject].totalQuestions += score.total;
+                subjects[score.subject].tests += 1;
+            });
+            
+            return subjects;
+        }
+
+        function displaySubjectAnalysis(subjectPerformance) {
+            const subjectAnalysisDiv = document.getElementById('subjectAnalysis');
+            
+            if (Object.keys(subjectPerformance).length === 0) {
+                subjectAnalysisDiv.innerHTML = '<div class="no-scores">No subject data available</div>';
+                return;
+            }
+            
+            subjectAnalysisDiv.innerHTML = '<div class="subject-breakdown"></div>';
+            const breakdownDiv = subjectAnalysisDiv.querySelector('.subject-breakdown');
+            
+            Object.entries(subjectPerformance).forEach(([subject, data]) => {
+                const percentage = (data.totalScore / data.totalQuestions) * 100;
+                breakdownDiv.innerHTML += `
+                    <div class="subject-item">
+                        <div class="subject-name">${subject}</div>
+                        <div class="subject-score">${percentage.toFixed(1)}%</div>
+                        <div style="font-size: 0.8em; color: #7f8c8d;">${data.tests} tests</div>
+                    </div>
+                `;
+            });
+        }
+
+        function startTest(year) {
+            localStorage.setItem('currentTestYear', year);
+            window.location.href = 'quiz.html';
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+                localStorage.removeItem('currentTestYear');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Test backend connection and load progress
+        window.addEventListener('load', async () => {
+            try {
+                // Verify token is still valid
+                const profileResponse = await fetch(`${API_URL}/profile`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!profileResponse.ok) {
+                    throw new Error('Token invalid');
+                }
+                
+                console.log('✅ Dashboard loaded successfully');
+                loadProgress();
+                
+            } catch (error) {
+                console.error('❌ Authentication failed:', error);
+                alert('Session expired. Please login again.');
+                logout();
+            }
+        });
+    </script>
+</body>
+</html>

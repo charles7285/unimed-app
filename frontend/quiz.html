@@ -1,0 +1,2435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIMED Quiz - Sound Medics Tutorial</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .quiz-info {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .quiz-details {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .quiz-tag {
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .timer {
+            background: #e74c3c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .question-container {
+            padding: 30px;
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .question-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .question-number {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .question-subject {
+            background: #8e44ad;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            line-height: 1.7;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-weight: 500;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e9ecef;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .option:hover {
+            border-color: #3498db;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.2);
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+
+        .option.correct {
+            background: #27ae60;
+            color: white;
+            border-color: #27ae60;
+        }
+
+        .option.wrong {
+            background: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+
+        .option-label {
+            font-weight: bold;
+            margin-right: 15px;
+            min-width: 40px;
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 8px 12px;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .option.selected .option-label,
+        .option.correct .option-label,
+        .option.wrong .option-label {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px solid #e9ecef;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #219a52;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d68910;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .score-display {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(46, 204, 113, 0.3);
+        }
+
+        .score-display h3 {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .score-display p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-top: 4px solid #3498db;
+        }
+
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .no-questions {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+
+        .no-questions h3 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .controls {
+                justify-content: center;
+            }
+            
+            .question-header {
+                justify-content: center;
+            }
+            
+            .question-info {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .question-text {
+                font-size: 1.1em;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 UNIMED Post-UTME Practice Test</h1>
+            <p>Complete collection of 250+ past questions</p>
+        </div>
+
+        <div class="quiz-info">
+            <div class="quiz-details">
+                <div class="quiz-tag" id="quizYear">Year: Loading...</div>
+                <div class="quiz-tag" id="quizSubject">All Subjects</div>
+                <div class="quiz-tag" id="questionCount">Questions: 0</div>
+            </div>
+            <div class="timer" id="timer">Time: 60:00</div>
+        </div>
+
+        <div class="main-content">
+            <div id="quiz-content">
+                <!-- Quiz content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // COMPLETE UNIMED PAST QUESTIONS DATABASE - 250+ QUESTIONS
+        const questionsDB = {
+            '2022': [
+                // ENGLISH 2022 - 14 questions
+                {
+                    question: "The young woman in the passage was uncomfortable because",
+                    options: [
+                        "the man appeared to be showing interest in her by his prolonged eye contact",
+                        "the man's short and sharp gazes would tip the relationship toward greater intimacy", 
+                        "strangers who made the man's type of eye contact were likely to be dangerous",
+                        "she was allergic to eye contact"
+                    ],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "The reason given for the non-finality of research results on eye contact is",
+                    options: [
+                        "lack of concord and foresight among psychologists who carry out research on eye movement",
+                        "lack of uniformity in eye behaviour and the variability of contact situation",
+                        "that some subjects cheat during experiments, thus invalidating research findings", 
+                        "that research findings on eye contact have not been subjected to further empirical tests"
+                    ],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "From the expression 'proper street behaviour requires a balance of attention and intention', it can be concluded that",
+                    options: [
+                        "even among strangers, attitudes and purposes can be deduced from eye behaviour",
+                        "before walking the streets one must balance one's shifty eyes",
+                        "when intimate groups meet in the streets, eye contact is usually longer",
+                        "there is a balance between those with longer eye contact and those with shorter eye contact"
+                    ],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "Which of the following can be concluded from the opening paragraph?",
+                    options: [
+                        "The effects of eye contact are always overwhelming",
+                        "Eye behaviour is one of the non-verbal ways of communicating",
+                        "Eye movement is the most potent means of expressing intimacy",
+                        "People are always offended by searching eye contact"
+                    ],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "From the findings of the research described in the passage, one can reason that",
+                    options: [
+                        "innocent people maintain longer eye contact than the guilty ones",
+                        "guilty people make less frequent gazes during interrogation",
+                        "'shifty eyes' are equally induced by innocence and guilt",
+                        "a feeling of guilt is occasioned by 'shifty eyes'"
+                    ],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "The crisis ended as suddenly as it began.",
+                    options: [
+                        "The crisis had suddenly begun",
+                        "The crisis will not end suddenly",
+                        "The crisis stopped almost immediately",
+                        "The crisis will stop immediately"
+                    ],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "One thing I will not be complaining about in my new job is a lack of excitement.",
+                    options: [
+                        "The job is bad",
+                        "The job is exciting",
+                        "The job is not too exciting",
+                        "The job has been previously done"
+                    ],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "The Governor parried all the questions put to him by the journalist.",
+                    options: [
+                        "The Governor answered all the questions brilliantly",
+                        "The Governor evaded all the questions",
+                        "The Governor failed all the questions",
+                        "The Governor mastered all the questions"
+                    ],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "If I visited England, I might go to Manchester City.",
+                    options: [
+                        "When I go to England, I could go to Manchester City",
+                        "Whenever I visit England, I must go to Manchester City",
+                        "I did not go to England and could not go to Manchester City",
+                        "I could not visit Manchester City because I did not want to go to England"
+                    ],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "The man puts his foot down whenever he is convinced of his action.",
+                    options: [
+                        "He desires to assert his will in the situation",
+                        "He makes his mark wherever he goes",
+                        "His attitude demonstrates someone who likes to oppress others around him",
+                        "He demonstrates firmness of character"
+                    ],
+                    correct: 3,
+                    subject: "English"
+                },
+                {
+                    question: "Accountability is certainly a desirable quality in a politician.",
+                    options: ["Respectability", "Courage", "Responsibility", "Diligence"],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "The common practice among some media practitioners is to be sensational in their reporting.",
+                    options: ["prevalent", "rampant", "ordinary", "cogent"],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "That fateful decision changed the company's outlook in many ways.",
+                    options: ["wonderful", "disastrous", "uncontrollable", "unsuccessful"],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "The accident victim received a superficial wound from the crash.",
+                    options: ["a serious", "a painless", "an internal", "an external"],
+                    correct: 3,
+                    subject: "English"
+                },
+
+                // BIOLOGY 2022 - 12 questions
+                {
+                    question: "In a dicot leaf, guard cells differ from other epidermal cells because they",
+                    options: ["have no definite shape", "lack nuclei", "are smaller", "contain chloroplasts"],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "Which of the following structures is NOT found in the female agama lizard?",
+                    options: ["Pre-anal pads", "Nuchal crest", "Gular fold", "Nasal scale"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "If an isolated living cell is left in distilled water for two hours, it is likely to",
+                    options: [
+                        "lose some of its water to the surrounding water",
+                        "lose all of its water to the surrounding water", 
+                        "reproduce by binary fission",
+                        "become more turgid"
+                    ],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "If an organic compound has its Hydrogen: Oxygen ratio as 2:1, it is likely to be",
+                    options: ["Water", "a carbohydrate", "a fat", "a fatty acid and glycerol"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "Spirogyra and Mucor can be grouped together as Thallophyta because",
+                    options: [
+                        "they are unicellular organism",
+                        "their spores could be dispersed by wind",
+                        "they are capable of living independent lives",
+                        "their bodies are made up of thallus and filaments"
+                    ],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "The mammalian organ through which nourishment and oxygen diffuse into a developing embryo is called",
+                    options: ["Placenta", "chorion", "umbilical cord", "oviduct"],
+                    correct: 0,
+                    subject: "Biology"
+                },
+                {
+                    question: "Which of the following organelles are likely to be present in cells that are actively respiring and photosynthesisizing?",
+                    options: [
+                        "Nucleolus and centrioles",
+                        "Mitochondria and chloroplast",
+                        "Lysosomes and ribosomes",
+                        "Golgi apparatus and endoplasmic reticulum"
+                    ],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "One of these organisms is not an Autotroph",
+                    options: ["Spirogyra", "Zea mays", "Rhizobium", "Mushroom"],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "Muscles fatigue is caused by",
+                    options: [
+                        "Accumulation of ethanol in the muscle cells",
+                        "Accumulation of methanol in the muscles cells",
+                        "Accumulation of lactic acid in the muscle cells", 
+                        "Accumulation of pyruvic acid in the muscle"
+                    ],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "Which of the organelles is not directly connected to cell division process?",
+                    options: ["Centromere", "Microtubules", "Golgi bodies", "Spindle apparatus"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "The mechanisms of opening and closing the stomata is associated with the",
+                    options: ["Guard cells", "Stoma", "Lenticels", "Air spaces"],
+                    correct: 0,
+                    subject: "Biology"
+                },
+                {
+                    question: "If a human skin cell with 46 chromosomes divided by mitosis, how many chromosomes will each daughter cell have?",
+                    options: ["23", "12", "46", "92"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+
+                // CHEMISTRY 2022 - 12 questions
+                {
+                    question: "Basic hydrolysis of esters is called ______.",
+                    options: ["acetylation", "acidification", "decarboxylation", "saponification"],
+                    correct: 3,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Carbon-carbon double bonds consist of ______ and _______.",
+                    options: [
+                        "1 sigma (δ) bond and 1 pi (π) bond",
+                        "2 sigma (δ) bond and 1 pi (π) bond",
+                        "1 sigma (δ) bond and 2 pi (π) bond",
+                        "2 sigma (δ) bond and 2 pi (π) bond"
+                    ],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "In stable organic compounds, carbon will always form ________ bond.",
+                    options: ["2", "4", "3", "5"],
+                    correct: 1,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "What is the bond angle between the hybrid orbitals in methane?",
+                    options: ["180°", "120°", "109.5°", "115.5°"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Calculate the molar concentration of HCl if 50 ml of HCl is required to neutralise 25 ml of 1 M NaOH in acid base titration.",
+                    options: ["0.25 M", "0.5 M", "1.0 M", "2.0 M"],
+                    correct: 1,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Which of the following is a bleaching agent?",
+                    options: ["sodium hypochlorite", "sulphur dioxide", "liquid ammonia", "ether"],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The aluminium belongs to group ______ and period ______ in the period table.",
+                    options: ["5 and 4", "5 and 2", "3 and 3", "7 and 0"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Aluminium is extracted from ______ by ______.",
+                    options: ["alumina, electrolysis", "alum, electrolysis", "alumina, pyrolysis", "alum, photolysis"],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The two major types of covalent bonds in carbonyl group are ______ and ______.",
+                    options: ["Sigma (δ) and pi (π) bonds", "pi (π) bonds and alpha (α)", "Sigma (δ) and gamma (γ)", "alpha (α) and beta (β)"],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The catalyst used in esterification reaction is ______.",
+                    options: ["concentrated C₆H₁₂O₆", "concentrated HNO₃", "concentrated CH₃Cl", "concentrated H₂SO₄"],
+                    correct: 3,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Carbon dioxide contains carbon and oxygen in a fixed ratio 3:8 by mass. Name the law of chemical combination which governs this statement.",
+                    options: ["law of constant proportion", "Avogadro's Law", "Boyle's law", "Gay-Lussac Law"],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Ethanolic acid is a weak acid because?",
+                    options: [
+                        "it totally dissociates into its constituent ions when dissolved in water",
+                        "it does not dissociates into its constituent ions when dissolved in water",
+                        "it only partially dissociates into its constituent ions when dissolved in water",
+                        "it complete dissociates into its constituent ions when dissolved in water"
+                    ],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+
+                // PHYSICS 2022 - 12 questions
+                {
+                    question: "Which of the following physical quantities is NOT a vector?",
+                    options: ["Velocity", "Work", "Force", "Electric field intensity"],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "Of the following derived units, the one that is not a unit of power is",
+                    options: ["Joule/second", "Ampere volt", "Ampere² volt", "Volts²/ohm"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "For which of the under listed quantities is the derived unit ML²T² correct? I. Moment of a force II. Work III. Acceleration",
+                    options: ["I only", "II only", "III only", "I and II"],
+                    correct: 3,
+                    subject: "Physics"
+                },
+                {
+                    question: "Which of the following statements are true about the spring balance and the chemical balance?",
+                    options: [
+                        "I and IV",
+                        "II and III", 
+                        "III and IV",
+                        "I, II, and III"
+                    ],
+                    correct: 0,
+                    subject: "Physics"
+                },
+                {
+                    question: "Which of the following units is equivalent to kgms¹?",
+                    options: ["Ns¹", "Nms", "Ns", "Js¹"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "A football is hit with a velocity of 6ms¹ at an angle of 30º to the horizontal. The time of flight of the ball is",
+                    options: ["0.6s", "0.4s", "5s", "0.3s"],
+                    correct: 0,
+                    subject: "Physics"
+                },
+                {
+                    question: "A machine gun with a mass of 5kg fires a 50g bullet at a speed of 100 ms¹. The recoil speed of the machine gun is",
+                    options: ["0.5 m/sec", "1.5 m/sec", "1 m/sec", "2 m/sec"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "A man stands on a spring scale placed in a lift. The lift descends at constant velocity. As a result, the scale reads a weight",
+                    options: [
+                        "greater than the weight of the man",
+                        "the same as the weight of the man",
+                        "of zero",
+                        "less than the weight of the man"
+                    ],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "A rocket burns 0.01kg of fuel each second and ejects it as a gas with a velocity of 5,000m/s. What force does the gas exert on the rocket?",
+                    options: ["500 000N", "500N", "50N", "5 000N"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "A 1000kg elevator is descending vertically with an acceleration of 1.0ms², if the acceleration due to gravity is 10.0ms², the tension in the suspending cable is",
+                    options: ["1.0N", "10.0N", "9 000.0N", "11 000.0N"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "When taking a penalty kick, a footballer applies a force of 30.0N for a period of 0.05s. If the mass of the ball is 0.075kg, calculate the speed with which the ball moves off.",
+                    options: ["4.50ms⁻¹", "11.25ms⁻¹", "20.00ms⁻¹", "45.00ms⁻¹"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "If it takes 5.0 hours to drain a container of 540.0cm³ of water, what is the flow rate of water from the container in kgs⁻¹? (Density of water 1000 kgm³)",
+                    options: ["32.5", "31.5", "30.8", "30.0"],
+                    correct: 3,
+                    subject: "Physics"
+                },
+
+                // MATHEMATICS 2022 - 10 questions
+                {
+                    question: "A group of market women sell at least one of yam, plantain and maize. 12 of them sell maize, 10 sell yam and 14 sell plantain. 5 sell plantain and maize, 4 sell yam and maize, 2 sell yam and plantain only while 3 sell all the three items. How many women are in the group?",
+                    options: ["25", "19", "18", "17"],
+                    correct: 0,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "Find all real number x which satisfy the inequality 1/3(x + 1) - 1 > 1/5(x + 4)",
+                    options: ["x < 11", "x < -1", "x > 6", "x > 11"],
+                    correct: 3,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "Four boys and ten girls can cut a field first in 5 hours. If the boys work at 4 the rate at which the girls work, how many boys will be needed to cut the field in 3 hours?",
+                    options: ["180", "60", "25", "20"],
+                    correct: 3,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "A cylindrical tank has a capacity of 3080 m³. What is the depth of the tank if the diameter of its base is 14 m?",
+                    options: ["25 m", "23 m", "22 m", "20 m"],
+                    correct: 3,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "The acres for rice, pineapple, cassava, cocoa and palm oil in a certain district are given respectively as 2, 5, 3, 11 and 9. What is the angle of the sector of cassava in a pie chart?",
+                    options: ["180°", "36°", "60°", "108°"],
+                    correct: 1,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "Three consecutive terms of a geometric progression are given as n - 2, n and n + 3. Find the common ratio.",
+                    options: ["3/2", "2/3", "1/2", "1/4"],
+                    correct: 0,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "In a class of 40 students, 32 offer mathematics, 24 offer physics and 4 offer neither mathematics nor physics. How many offer both mathematics and physics?",
+                    options: ["4", "8", "16", "20"],
+                    correct: 3,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "The sum of the interior angle of pentagon is 6x + 6y. Find y in terms of x.",
+                    options: ["y=6-x", "y=90-x", "y=120-x", "y=150-x"],
+                    correct: 1,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "How many sides has a regular polygon whose interior angle is 135°",
+                    options: ["12", "10", "9", "8"],
+                    correct: 3,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "The locus of a dog tethered to a pole with a rope of 4 m is a",
+                    options: ["circle with diameter 4 m", "circle with radius 4 m", "semi-circle with diameter 4 m", "semi-circle with radius 4 m"],
+                    correct: 1,
+                    subject: "Mathematics"
+                }
+            ],
+
+            '2019': [
+                // ENGLISH 2019 - 10 questions
+                {
+                    question: "The police knew that the suspect was not being straight with them. This means that the suspect was",
+                    options: ["not telling the truth", "not friendly", "afraid", "timid"],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "After his prison experience, Etim decided to go straight. This means that he decided to",
+                    options: [
+                        "holds his head up and walk with defiance",
+                        "change his religion", 
+                        "live an honest life",
+                        "stop using drugs"
+                    ],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "The teacher spoke with his tongue in his cheek when he said that Ade was the best pupil. This means that the teacher",
+                    options: ["did not mean what he said", "was disappointed", "was angry", "tried to encourage"],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "She does not remember …… to anyone at the peak",
+                    options: ["to talk", "to be talking", "talking", "to have talked"],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "This portion is to be shared between…….",
+                    options: ["us and them", "we and them", "us and they", "we and they"],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "If the Jury's verdict is 'not guilty', the defendant will be ………",
+                    options: ["acquitted", "indicted", "pardoned", "forgiven"],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "The doctor diagnosed the tumour as malignant",
+                    options: ["deadly", "painful", "trouble", "minor"],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "The election system we adopted was his brainchild.",
+                    options: ["undoing factor", "invention", "power", "fabrication"],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "In all, I consider the behaviour unpalatable.",
+                    options: ["unacceptable", "offensive", "acceptable", "inoffensive"],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "Her action will certainly exacerbate the situation.",
+                    options: ["ameliorate", "worsen", "aggravate", "clarify"],
+                    correct: 1,
+                    subject: "English"
+                },
+
+                // BIOLOGY 2019 - 14 questions
+                {
+                    question: "Regulation of constant internal environment is",
+                    options: ["Osmosis", "Homeostasis", "Secretion", "Phototasis"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "The most abundant component of blood plasma is",
+                    options: ["Water", "Protein", "Glucose", "Urea"],
+                    correct: 0,
+                    subject: "Biology"
+                },
+                {
+                    question: "A condition whereby a person sees far objects clearly but nearby ones appear blurred",
+                    options: ["Myopia", "Hypermetropia", "Astigmatism", "Cataract"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "The part of the ear responsible for maintenance of balance is",
+                    options: ["Cochlea", "Stapes", "Semicircular canals", "Ossicles"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "The ability to control or regulate the amount of light that enters the eye is",
+                    options: ["Regulation", "Accommodation", "Vision", "Photoreception"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "The vegetarian habit of the tadpole is related to possession of",
+                    options: ["A streamline body", "A long coiled intestine", "External gills", "A large head and a sucker"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "The hormone that lowers blood sugar level is",
+                    options: ["Insulin", "Glucagon", "Thyrosine", "Adrenaline"],
+                    correct: 0,
+                    subject: "Biology"
+                },
+                {
+                    question: "One of these is not a kidney disease",
+                    options: ["Dropsy", "Nephritis", "Cirrhosis", "Diuresis"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "In which of the following animals does external fertilisation occur?",
+                    options: ["Toad", "Bird", "Lizard", "Snake"],
+                    correct: 0,
+                    subject: "Biology"
+                },
+                {
+                    question: "A fertilised ovary forms",
+                    options: ["Seed", "Pericarp", "Ovule", "Fruit"],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "An example of a drupe is",
+                    options: ["Coconut", "Tomato", "Pineapple", "Orange"],
+                    correct: 0,
+                    subject: "Biology"
+                },
+                {
+                    question: "The plant hormone that induces ripening of fruits and retard the growth of axillary buds is",
+                    options: ["Ethene", "Cytokinin", "Gibberellin", "Auxin"],
+                    correct: 0,
+                    subject: "Biology"
+                },
+                {
+                    question: "If Ondo State population is currently 5 million and the annual population growth rate is 2%, what will the state's population be in 2020?",
+                    options: ["5.1 million", "5.2 million", "5.3 million", "5.4 million"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "Increase in population beyond a point where available resources in the habitat are not adequate to support all individuals in the population is",
+                    options: ["Overcrowding", "Over population", "Succession", "Maximum capacity"],
+                    correct: 0,
+                    subject: "Biology"
+                },
+
+                // CHEMISTRY 2019 - 13 questions
+                {
+                    question: "The electronic configuration of the phosphide ion [P³⁻] is",
+                    options: ["[Ne] 3S² 3P³", "[Ne] 3S² 3P¹", "[Ne] 3S²", "[Ne] 3S² 3P⁶"],
+                    correct: 3,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The oxidation state of Chromium in [Cr(OH)₆]³⁻ is",
+                    options: ["+3", "+2", "-3", "-2"],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The ground state electronic configuration of copper is",
+                    options: ["[Ar]3d⁹4s¹", "[Ar]3d⁹4s²", "[Ar]3d¹⁰4s¹", "[Ar]3d¹⁰4s²"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "What is the mass of 0.5mole of sodiumtrioxocarbonate (IV)? [Na=23, O=16, C=12, H=1]",
+                    options: ["5.3g", "53g", "10.6g", "106g"],
+                    correct: 1,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "What is the total number of valence electrons in (CH₂)₂CO?",
+                    options: ["24", "12", "18", "6"],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The splitting of a nucleus into two smaller nuclei of similar mass is called ---.",
+                    options: ["fusion", "Fission", "decay", "emission"],
+                    correct: 1,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Given the volume of carbon (IV) oxide gas at STP to be 2.24dm³, calculate the mole of carbon (IV) oxide gas",
+                    options: ["0.10 mole", "0.20 mole", "0.30 mole", "0.40 mole"],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "--- law states that the volume of a given sample of gas at constant pressure is directly proportional to its absolute temperature",
+                    options: ["Boyle's", "Avogadro's", "Charles's", "Graham's"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The followings are factors affecting discharge of ions during electrolysis except ---",
+                    options: ["charge of ion", "concentration of ion", "nature of electrode used", "position of the ion in electrochemical series"],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The imaginary mixing of different atomic orbital is called...................",
+                    options: ["orbitalisation", "atomisation", "Hybridization", "isomerisation"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Amino derivatives of carboxylic acid is called ……….",
+                    options: ["amino acid", "amide", "ammonolysis", "carboxylate"],
+                    correct: 1,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "A test carried out to give additional support or evidence for the presence of species is called…….",
+                    options: ["cation test", "flame test", "confirmatory test", "anion test"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "All these salts are soluble in water except………………",
+                    options: ["nitrate salt", "sodium salts", "potassium salts", "carbonate salts"],
+                    correct: 3,
+                    subject: "Chemistry"
+                },
+
+                // PHYSICS 2019 - 13 questions
+                {
+                    question: "A net force of 10 N accelerates an object at 5 m/s². What net force would be required to accelerate the same object at 1 m/s²?",
+                    options: ["1 N", "5 N", "2 N", "50 N"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "A 2×10³ kg car travels at a constant speed of 12 m/s around a circular curve of radius 30 m. As the car goes around the curve, the centripetal force is directed",
+                    options: [
+                        "Tangentially to the curve in the direction of motion",
+                        "Toward the center of the circular curve", 
+                        "Away from the center of the circular curve",
+                        "Tangentially to the curve opposite the direction of motion"
+                    ],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "The image formed by a concave mirror is observed to be virtual, erect and enlarged. The position of the object should be:",
+                    options: ["between F and C", "at C", "beyond C", "between P and F"],
+                    correct: 3,
+                    subject: "Physics"
+                },
+                {
+                    question: "Ohm's law is not obeyed by:",
+                    options: ["electrolytes", "discharge tubes", "vacuum tubes", "all of these"],
+                    correct: 3,
+                    subject: "Physics"
+                },
+                {
+                    question: "Mercury is used as a thermometric liquid in the thermometers because:",
+                    options: [
+                        "it wets the glass tube",
+                        "it is a good conductor of heat",
+                        "it cannot be obtained in pure state", 
+                        "mercury is transparent and not bright"
+                    ],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "The following are false of nuclear radiations except",
+                    options: [
+                        "alpha particles can be deflected by both electric and magnetic fields",
+                        "beta particles are deflected electric field only",
+                        "gamma rays can be deflected by both electric and magnetic fields",
+                        "beta particle has the mass of helium"
+                    ],
+                    correct: 0,
+                    subject: "Physics"
+                },
+                {
+                    question: "A machine gun with a mass of 5kg fires a bullet at a speed of 100ms⁻¹. The recoil speed of the machine gun is 1 ms⁻¹, what is the mass of the bullet?",
+                    options: ["5g", "50g", "10g", "20g"],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "What is the latent heat of fusion of ice if the heat required to change 10kg of ice at 0°C into water at the same temperature is 800J?",
+                    options: ["8 kg⁻¹", "10 kg⁻¹", "80Jkg⁻¹", "800Jkg⁻¹"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "If the current in each of the three 5Ω resistors connected in parallel is 12A, what is the potential difference applied across the combination?",
+                    options: ["40V", "120V", "60V", "24V"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "If the cost of operating for 24 hours a lamp requiring 1A on a 220V line is 26.4Naira, the charges rate is?",
+                    options: ["24.2 N per kWh", "4.2 N per kWh", "24.4 N per kWh", "4.40N per kWh"],
+                    correct: 3,
+                    subject: "Physics"
+                },
+                {
+                    question: "A potential difference of 6V is used to produce a current of 5A through a heating coil, the time spent to produced a heat of 6000J is",
+                    options: ["200s", "60s", "240s", "24s"],
+                    correct: 0,
+                    subject: "Physics"
+                },
+                {
+                    question: "The EMF of an electric cell with internal resistance of 2 Ω is 3.5V. If a current of 0.5A flows when a resistor is connected across it. Find the resistance of the resistor.",
+                    options: ["50 Ω", "2.5 Ω", "5 Ω", "1 Ω"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "A guitar string is 50cm long. The half value of the wavelength of its fundamental note is",
+                    options: ["75cm", "150cm", "50cm", "37.5cm"],
+                    correct: 2,
+                    subject: "Physics"
+                }
+            ],
+
+            '2018': [
+                // ENGLISH 2018 - 10 questions
+                {
+                    question: "They did not know what to expect and so decided to play it by ear. This means that they decided to",
+                    options: [
+                        "Listen attentively to everyone",
+                        "act according to circumstances", 
+                        "pretend to be deaf",
+                        "prepare for the worst"
+                    ],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "Ojo decided that the best course of action was to play along with them for the time being. This means that he decided to",
+                    options: [
+                        "join them temporarily",
+                        "entertain them for a while",
+                        "pretend to agree with them",
+                        "be playful with them"
+                    ],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "The conference was attended by people from all walks of life. This means that the conference was attended by people",
+                    options: ["of all races", "who travelled widely", "from all profession", "from different parts of the world"],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "When all the items on the agenda had been discussed, the meeting was ……..",
+                    options: ["adjourned", "dismissed", "postponed", "dissolved"],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "Because the new venture was …. many businessmen and women went into it.",
+                    options: ["rich", "manageable", "lucrative", "satisfying"],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "We save a …. of lions at the game reserve",
+                    options: ["pride", "family", "band", "group"],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "Amina is the one who initiated the quarrel, not Nike",
+                    options: ["started", "stopped", "settled", "fuelled"],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "Why should I retract my statement when it is nothing but the truth?",
+                    options: ["alter", "deny", "withdraw", "Condemn"],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "Is he really behaving oddly?",
+                    options: ["abnormally", "normally", "evenly", "Properly"],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "Her health deteriorated rapidly.",
+                    options: ["worsened", "Improved", "stagnated", "declined"],
+                    correct: 0,
+                    subject: "English"
+                },
+
+                // BIOLOGY 2018 - 14 questions
+                {
+                    question: "Which of these is an inner ear",
+                    options: ["Pinna", "Incus", "Tympanic membrane", "Cochlea"],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "The chisel-like shape teeth used for biting off pieces of food is called",
+                    options: ["Canines", "Molars", "Premolars", "Incisors"],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "The enzyme secreted by the cells lining the wall of stomach and which helps to coagulate milk is",
+                    options: ["Rennin", "Pepsin", "Ptyalin", "Trypsin"],
+                    correct: 0,
+                    subject: "Biology"
+                },
+                {
+                    question: "The type of association between rabbit and the bacteria in its gut that secrete cellulase that digests cellulose is",
+                    options: ["Saprophytism", "Parasitism", "Mutualism", "Commensalism"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "The portion of the alimentary canal of a bird where food materials are temporarily stored is",
+                    options: ["Gizzard", "Crop", "Rectum", "Stomach"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "One of these is a male reproductive part of a flower",
+                    options: ["Carpel", "Stamen", "Pistil", "Sepal"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "Axial placentation is found in",
+                    options: ["Cowpea", "Pawpaw", "Sunflower", "Tomato"],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "One of these is not a feature of a wind pollinated flower",
+                    options: ["Light pollen grains", "Dull colouration", "No scent or nectaries", "Bright colouration"],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "The larval form of a beetle is called",
+                    options: ["Wriggler", "Grub", "Maggot", "Caterpillar"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "One of these is not a social insect",
+                    options: ["Ant", "Termite", "Cockroach", "Honeybee"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "Territoriality is common in one of the following organisms",
+                    options: ["Dogs", "Agama lizard", "Snake", "Deer"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "One of these is a biotic component of the ecosystem",
+                    options: ["Humidity", "Temperature", "Water current", "Bacteria"],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "Which instrument can be used to measure light penetration in aquatic ecosystem?",
+                    options: ["Rain gauge", "Secchi disc", "Barometer", "Anemometer"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "Which of these is a primary producer in terrestrial ecosystem?",
+                    options: ["Fungi", "Grass", "Cow", "Lion"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+
+                // CHEMISTRY 2018 - 13 questions
+                {
+                    question: "An haloacid with the highest acidic strength is ---",
+                    options: ["HI", "HBr", "HCl", "HF"],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "All the followings are polar molecules except ---",
+                    options: ["HCN", "CH₃Cl", "H₂O", "CO₂"],
+                    correct: 3,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "There are discontinuities in electronic configuration of --- and --- among the first series of transition elements",
+                    options: ["Sc & Zn", "Fe & Co", "Cr & Cu", "Ti & Mn"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The term used to describe the process of isolating a metal from its ore is called ---",
+                    options: ["purification", "dissociation", "extraction", "modification"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Which of these elements belong to salt former group?",
+                    options: ["sodium", "sulphur", "Iodine", "oxygen"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "A given mass of nitrogen is 0.12dm³ and 1.01×10⁵N/m². Find its pressure at the same temperature if its volume is changed to 0.24dm³",
+                    options: ["0.505 × 10⁵ N/m²", "2.02 × 10⁵ N/m²", "4.04 × 10⁵ N/m²", "1.01 × 10⁵ N/m²"],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "--- law explain the chemical behaviour of gases among all other gas laws",
+                    options: ["Boyle's", "Charcle's", "Gay Lusaac's", "Avogadro's"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Properties that depend on the number of solute molecules and not on their chemical identity are called --- properties",
+                    options: ["non-chemical", "isoelectric", "Colligative", "chemisorption"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "A system of reaction with ΔG equals to zero is said to be ---",
+                    options: ["non-spontaneous", "spontaneous", "at equilibrium", "semi- spontaneous"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The process of converting vegetable oil into margarines is called ---",
+                    options: ["substitution", "Hydrogenation", "halogenation", "carboxylation"],
+                    correct: 1,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The most prominent reaction that benzene easily undergo is ---",
+                    options: ["addition reaction", "nucleophilic substitution reaction", "electrophilic substitution reaction", "elimination reaction"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "...... is associated with brown ring formation on addition of FeSO₄ solution and concentrated H₂SO₄",
+                    options: ["nitrate salt", "sulphate salts", "sulphite salts", "carbonate salts"],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Which of these chloride salts is insoluble in water?",
+                    options: ["NaCl", "CaCl₂", "AgCl", "KCl"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+
+                // PHYSICS 2018 - 13 questions
+                {
+                    question: "Which of the following is used to measure the internal diameter of a pipe?",
+                    options: ["metre rule", "micrometer", "vernier calipers", "measuring cylinder"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "The motion of the pendulum from A to B and back to A is known as ____ oscillation.",
+                    options: ["Two", "One and half", "One", "None of the above"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "A bicycle takes 10s to travel the first 60 m, and another 20s to travel a further 90 m. What is the average speed?",
+                    options: ["4.5 m/s", "5.0 m/s", "6.5 m/s", "7.2 m/s"],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "A moving body resist a change in its state of motion because of its",
+                    options: ["weight", "mass", "speed", "Inertia"],
+                    correct: 3,
+                    subject: "Physics"
+                },
+                {
+                    question: "The echo of a sound from 1750m depth of an ocean is heard 2.5s later. What is the speed",
+                    options: ["3500m", "1750m", "1400 ms⁻¹", "2800m"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "Calculate the wavelength of a wave traveling with velocity 360ms⁻¹ if the period of the wave is 0.17s",
+                    options: ["6m", "17m", "3m", "60m"],
+                    correct: 3,
+                    subject: "Physics"
+                },
+                {
+                    question: "Calculate the focal length of an object placed 30cm from a concave mirror if the linear magnification of the image produced is 1",
+                    options: ["22cm", "30cm", "15cm", "2.5cm"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "Elements that emit spontaneous radiation are",
+                    options: ["stable", "Unstable", "radiogram", "isobar"],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "An electric heater of 50W is used to heat a metal block of mass 10kg. In 5 minutes, by what value will the temperature rise if the specific heat capacity of the metal in 150Jkg⁻¹k⁻¹.",
+                    options: ["15°C", "50°C", "12°C", "10°C"],
+                    correct: 3,
+                    subject: "Physics"
+                },
+                {
+                    question: "If the energy stored in a capacitor is 0.5J when a 10 V supply is connected to it, what is the value of the capacitor?",
+                    options: ["1mF", "10 MF", "0.5 mF", "50 mF"],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "The size of the image formed by an object 1cm high placed on the axis 15cm from a converging lens is 2cm, the image distance from the lens is.",
+                    options: ["30cm", "15cm", "2.5cm", "1.2cm"],
+                    correct: 0,
+                    subject: "Physics"
+                },
+                {
+                    question: "Which of the following is not one of the peaceful applications of nuclear energy",
+                    options: ["electricity generation", "research", "hand grenade", "destruction of cancer"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "______ is emitted in a radioactive substance without altering the proton number of the substance?",
+                    options: ["proton", "neutron", "alpha", "beta"],
+                    correct: 1,
+                    subject: "Physics"
+                }
+            ],
+
+            '2017': [
+                // ENGLISH 2017 - 8 questions
+                {
+                    question: "Ladies and gentlemen, the worse may be over, but we are not out of the woods yet. This means that we are",
+                    options: [
+                        "still in the forest",
+                        "not yet ready to celebrate our success", 
+                        "likely to encounter more difficulties",
+                        "not sure of ourselves"
+                    ],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "Surprisingly, Musa turned ……….. the job offer",
+                    options: ["away", "in", "out", "down"],
+                    correct: 3,
+                    subject: "English"
+                },
+                {
+                    question: "We have no choice ……… to do what they demanded.",
+                    options: ["except", "than", "unless", "but"],
+                    correct: 3,
+                    subject: "English"
+                },
+                {
+                    question: "In this matter, we must be prepared to tolerate human frailty.",
+                    options: ["inquisitiveness", "weakness", "profligacy", "innovation"],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "I detest his lackadaisical attitude.",
+                    options: ["carefree", "lazy", "supercilious", "disloyal"],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "Peter always approaches issues optimistically.",
+                    options: ["realistically", "pessimistically", "carelessly", "unrealistically"],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "Why should Dixon be evasive in answering the question?",
+                    options: ["indirect", "direct", "guessing", "sure"],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "The government is going to--- all the old buildings in this area and have new ones erected.",
+                    options: ["Abolish", "End", "Terminate", "Demolish"],
+                    correct: 3,
+                    subject: "English"
+                },
+
+                // BIOLOGY 2017 - 14 questions
+                {
+                    question: "Heterotrophic mode of life with extracellular digestion is a feature of",
+                    options: ["Lichen", "Fungi", "Algae", "Cyanobacteria"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "Lack of structures to represent the leaf, stem and root are unique to",
+                    options: ["Liverwort", "Moss", "Algae", "Mycorrhiza"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "Which of these transports water and minerals salts in pteridophytes",
+                    options: ["Phloem", "Rhizoid", "Root", "Xylem"],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "Seed producing plants are collectively called",
+                    options: ["Gymnosperm", "Spermatophyte", "Angiosperm", "Pteridophytes"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "Which of the following shows highest evolutionary advancement",
+                    options: ["Moss", "Fern", "Spirogyra", "Pine"],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "Complete metamorphosis occurs in one of the following insects",
+                    options: ["Cockroach", "Butterfly", "Beetle", "Aphid"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "The reverse process of this equation 6CO₂ + 6H₂O ……………… C₆H₁₂O₆ + 6O₂",
+                    options: ["Translocation", "Digestion", "Respiration", "Nutrition"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "One of these is not a fat soluble vitamin",
+                    options: ["Vitamin A", "Vitamin C", "Vitamin E", "Vitamin K"],
+                    correct: 1,
+                    subject: "Biology"
+                },
+                {
+                    question: "Benedict's solution is used to test for",
+                    options: ["Starch", "Proteins", "Fats", "Reducing sugars"],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "The cell structure located near the nucleus used in cell division is",
+                    options: ["Centriole", "Lysosome", "Endoplasmic reticulum", "Ribosome"],
+                    correct: 0,
+                    subject: "Biology"
+                },
+                {
+                    question: "The building up biological process is called",
+                    options: ["Catabolism", "Isomerism", "Anabolism", "Metabolism"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "The knot of capillaries in the Bowman's capsule is called",
+                    options: ["Cortex", "Medulla", "Glomerulus", "Pelvis"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "Which of the following organisms moves with the aid of flagella?",
+                    options: ["Amoeba", "Paramecium", "Trypanosome", "Hydra"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "The portion of the blood cells responsible for blood clotting is",
+                    options: ["Erythrocytes", "Leucocytes", "Platelets", "Monocytes"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+
+                // CHEMISTRY 2017 - 13 questions
+                {
+                    question: "All the following metals are solid except ……………",
+                    options: ["Cadmium", "Lead", "Mercury", "Sodium"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Carbon has --------- allotropes",
+                    options: ["One", "Two", "Three", "Four"],
+                    correct: 1,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The catalysts for Contact process and Haber process are --- and --- respectively",
+                    options: ["Iron and Nickel", "Iron and Vanadium oxide", "Vanadium oxide and Iron", "Nickel and Iron"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "An example of acidic salt is -----------------",
+                    options: ["NaCl", "KH₂PO₄", "Zn(OH)Cl", "KCr(SO₄)₂.12H₂O"],
+                    correct: 1,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "In a sample containing 100 atoms of X, 70 were found to be ⁹X while 30 were ¹¹X isotopes. Determine the average relative atomic mass",
+                    options: ["6.3g", "9.6g", "10.4g", "3.3g"],
+                    correct: 1,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The electrode in which metallic radicals migrate to during electrolysis is termed ---",
+                    options: ["anode", "cathode", "glass electrode", "selective ion electrode"],
+                    correct: 1,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "A part of an organic compound that determines it chemical property is called---",
+                    options: ["homologues series", "empirical formular", "functional group", "isomerism"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The scope of organic Chemistry does not include",
+                    options: ["carbon and its compounds", "animal products", "transition metals", "plant products"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The reaction 2C₂H₂ + 5O₂ is an example of",
+                    options: ["oxidation reaction", "addition reaction", "combustion", "oxidation process"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The degree of unsaturation of edible oil can be known by its ---",
+                    options: ["saponification value", "acid value", "iodine value", "esterification value"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The identification of various species present in a mixture of species without bothering on the quantity is called......",
+                    options: ["analysis", "quantitative analysis", "qualitative analysis", "protolysis"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Preliminary test involves all the followings except",
+                    options: ["physical appearance", "chemical reaction", "solubility test", "flame test"],
+                    correct: 1,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "A solution does not change the colour of red litmus paper when dipped in it. The solution must likely be......",
+                    options: ["acidic", "basic", "neutral", "acidic or neutral"],
+                    correct: 3,
+                    subject: "Chemistry"
+                },
+
+                // PHYSICS 2017 - 13 questions
+                {
+                    question: "A car travels 90 m due north in 15 s. then the car turns around and travels 40 m due south in 5 s. what is the magnitude of the average velocity of the car during this 20 s interval?",
+                    options: ["2.5m/s", "5.0m/s", "6.5m/s", "7.0m/s"],
+                    correct: 0,
+                    subject: "Physics"
+                },
+                {
+                    question: "A worker uses a rope to pull a cart; the worker's pull on the handle of the cart can best be described as a force having",
+                    options: ["Magnitude only", "Direction only", "Both magnitude and direction", "Magnitude or direction"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "When a neutral metal sphere is charged by contact with a positively charged glass rod, the sphere",
+                    options: ["Loses electrons", "Gains electrons", "Loses protons", "Gains protons"],
+                    correct: 0,
+                    subject: "Physics"
+                },
+                {
+                    question: "Sound travels in air as:",
+                    options: ["longitudinal waves", "transverse waves", "electromagnetic waves", "matter waves"],
+                    correct: 0,
+                    subject: "Physics"
+                },
+                {
+                    question: "Which of the following is a scalar quantity?",
+                    options: [
+                        "the braking force needed to stop a car",
+                        "the effort needed to hammer a nail into wood",
+                        "the heat needed to boil some water", 
+                        "the thrust needed to lift a rocket off the ground"
+                    ],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "Using a stopwatch, which of the following is correct to determine the time for one oscillation of a pendulum?",
+                    options: [
+                        "Time for 20 oscillations and divide by 20",
+                        "Time for 20 oscillations and multiply by 20",
+                        "Time for one oscillation",
+                        "None of the above"
+                    ],
+                    correct: 0,
+                    subject: "Physics"
+                },
+                {
+                    question: "What does Newton's third law of motion say?",
+                    options: [
+                        "Acceleration is a result of resultant force acting on a body",
+                        "Resultant force is always equal but opposite to the force acting on a body",
+                        "For every action there is an equal but opposite reaction",
+                        "The forces acting on a body are always equal and opposite"
+                    ],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "An object Q is moving in a circle around a point R. A force F keeps it moving in the circle. If the force F suddenly disappears, Q will",
+                    options: ["goes off in a straight line", "moves towards R", "moves away from R", "moves away in a curved path"],
+                    correct: 0,
+                    subject: "Physics"
+                },
+                {
+                    question: "A heater marked 50W boils water for 50s, if the specific latent heat of evaporation is 5 × 10⁵ J kg⁻¹ the mass of water that evaporates is",
+                    options: ["50 kg", "0.005 kg", "0.1 kg", "0.05 kg"],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "The input voltage of a transformer with 300 turns of wire in the primary coil is 100V, if the output voltage of the transformer is 10V, what is the number of turns in the secondary coil?",
+                    options: ["10", "30", "20", "15"],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "The speed of light in air is 3 × 10⁸ ms⁻¹, if its speed in glass is 1.82 × 10⁸ ms⁻¹, the refractive index of the glass is",
+                    options: ["1.82", "3", "1.65", "6"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "What is the latent heat of fusion of ice if the heat required to change 10kg of ice at 0°C into water at the same temperature is 800J?",
+                    options: ["8 kg⁻¹", "10 kg⁻¹", "80 Jkg⁻¹", "800 Jkg⁻¹"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "It is easier to turn a tight nut and bolt by using a longer spanner because a longer spanner gives",
+                    options: ["more weight", "more friction", "bigger turning moment", "bigger pressure"],
+                    correct: 2,
+                    subject: "Physics"
+                }
+            ],
+
+            '2015': [
+                // ENGLISH 2015 - 16 questions
+                {
+                    question: "An incentive means:",
+                    options: ["A case to handle", "A motive for them", "Reason for working harder", "Something to remind them"],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "Enticing means:",
+                    options: ["Forcing", "Allowing", "Begging", "Persuading"],
+                    correct: 3,
+                    subject: "English"
+                },
+                {
+                    question: "Orbit of means:",
+                    options: ["Sphere of influence", "Usual progression", "Revolving round", "Member of"],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "What figure of speech is used in 'riding on the back of'",
+                    options: ["Simile", "Metaphor", "Personification", "Irony"],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "In the writer's opinion the way to development of the poorer countries must---as that taken by wealthier countries.",
+                    options: [
+                        "Be along the same route",
+                        "Take a different route", 
+                        "Should walk side by side",
+                        "Should rely on their resources"
+                    ],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "With the decline in sales of manufactured goods at home and abroad, widespread ---is likely to affect many firms.",
+                    options: ["promotion", "redundancy", "surplus", "abundance"],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "The motor trade employs the largest sector of the working ---",
+                    options: ["population", "congregation", "crowd", "denomination"],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "The government has therefore set up a ---to examine ways and means of ---new industries",
+                    options: ["commitment", "profession", "committee", "commune"],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "Unemployment is the most serious of all---problems",
+                    options: ["industrious", "industrial", "employment", "workers"],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "Before he started playing football he used to be overweight for his age and height; now he is actually ---",
+                    options: ["Light-weight", "Underweight", "light", "under-balanced"],
+                    correct: 1,
+                    subject: "English"
+                },
+                {
+                    question: "Last week it was doubtful if Kola would recover from his illness, but now it is almost--- that he will.",
+                    options: ["Assured", "Factual", "Genuine", "Certain"],
+                    correct: 3,
+                    subject: "English"
+                },
+                {
+                    question: "The questions in this exercise require--- answers, but the answers to the composition questions have to be approached subjectively.",
+                    options: ["Objective", "Factual", "Opposite", "Realistic"],
+                    correct: 0,
+                    subject: "English"
+                },
+                {
+                    question: "His invention may work in theory but it is not---",
+                    options: ["Application", "Effective", "Practical", "Convenient"],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "At first they thought the car belonged to the enemy, but to their relief it had already been captured by their---",
+                    options: ["Comrades", "Associates", "Collaborators", "Allies"],
+                    correct: 3,
+                    subject: "English"
+                },
+                {
+                    question: "I can't believe Femi would throw the ring into the river deliberately. He must have done it---",
+                    options: ["Incidentally", "Spontaneously", "Accidentally", "Crazily"],
+                    correct: 2,
+                    subject: "English"
+                },
+                {
+                    question: "The government is going to--- all the old buildings in this area and have new ones erected.",
+                    options: ["Abolish", "End", "Terminate", "Demolish"],
+                    correct: 3,
+                    subject: "English"
+                },
+
+                // MATHEMATICS 2015 - 6 questions
+                {
+                    question: "Simplify √27 × √50",
+                    options: ["8√5", "15√6", "8√6", "15√5"],
+                    correct: 1,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "Given that log 2 = 0.30103 and log 3 = 0.47712, without using tables, calculate log 6.",
+                    options: ["0.09062", "0.60206", "0.77815", "0.14363"],
+                    correct: 2,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "6 notebooks cost N300.00, how many books can be bought with N450.00.",
+                    options: ["8", "7", "9", "10"],
+                    correct: 2,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "Factorize 5m² – 80",
+                    options: ["5(m + 4)²", "5(m² – 16)", "5(m + 4)(m - 4)", "16(m² – 5)"],
+                    correct: 2,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "Without using tables or a calculator, calculate 12.9 × 0.54",
+                    options: ["5.966", "6.966", "6.968", "5.968"],
+                    correct: 1,
+                    subject: "Mathematics"
+                },
+                {
+                    question: "Express 2.4 Kg in g",
+                    options: ["240", "2400", "24", "480"],
+                    correct: 1,
+                    subject: "Mathematics"
+                },
+
+                // PHYSICS 2015 - 10 questions
+                {
+                    question: "Which of the following is a non-luminous object?",
+                    options: ["Sun", "Moon", "Stars", "Lighted candle"],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "If the velocity of light in air is 5.0 × 10⁸ ms⁻¹, find the velocity of light in a medium whose refractive index is 2.0",
+                    options: ["1 × 10⁹ ms⁻¹", "2.5 × 10⁸ ms⁻¹", "2.5 × 10⁸ ms⁻¹", "1 × 10⁹ ms⁻¹"],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "In which medium do sound waves have the greatest speed",
+                    options: ["Vacuum", "Air", "Water", "Steel"],
+                    correct: 3,
+                    subject: "Physics"
+                },
+                {
+                    question: "What is the kinetic energy of a boy of mass 50kg running with a velocity of 3 ms⁻¹?",
+                    options: ["7500 J", "150 J", "225 J", "450 J"],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "What is the potential energy of a swimmer of mass 65 kg at a height of 15 m above the swimming pool? (g = 9.8 ms⁻²)",
+                    options: ["9408 J", "9555 J", "4777.5 J", "4704 J"],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "Convert 200 Kelvin to °C.",
+                    options: ["70°C", "73°C", "-70°C", "-73°C"],
+                    correct: 3,
+                    subject: "Physics"
+                },
+                {
+                    question: "Why does water wet its glass container and mercury does not?",
+                    options: [
+                        "Water is a more viscous liquid than mercury",
+                        "Mercury is a more viscous liquid than water",
+                        "The adhesive forces between water and glass molecules is more than the cohesive forces between water molecules",
+                        "The adhesive forces between mercury and glass molecules is more than the cohesive forces between mercury molecules"
+                    ],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "When a brass metal is heated, it expands because its molecules",
+                    options: [
+                        "Vibrate with smaller amplitude",
+                        "Vibrate with greater amplitude", 
+                        "Increase their speed of random motion",
+                        "Decrease their speed of random motion"
+                    ],
+                    correct: 1,
+                    subject: "Physics"
+                },
+                {
+                    question: "When oxygen gas is heated, it expands because its molecules",
+                    options: [
+                        "Vibrate with smaller amplitude",
+                        "Vibrate with greater amplitude", 
+                        "Increase their speed of random motion",
+                        "Decrease their speed of random motion"
+                    ],
+                    correct: 2,
+                    subject: "Physics"
+                },
+                {
+                    question: "Why do leaves of plants appear green?",
+                    options: [
+                        "Leaves use green light in photosynthesis",
+                        "Leaves absorb green light", 
+                        "Leaves reflect green light",
+                        "Leaf thickness is smaller than the wavelength of green light"
+                    ],
+                    correct: 2,
+                    subject: "Physics"
+                },
+
+                // CHEMISTRY 2015 - 10 questions
+                {
+                    question: "How much NaCl would be required to prepare normal saline (0.9% NaCl) in a 250 ml volumetric flask?",
+                    options: ["1.8 g", "13.2 g", "2.25 g", "9.0 g"],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "A sample of grape juice has pH of 3.80. What is the molar concentration of hydrogen ion in the juice?",
+                    options: ["1.58 × 10⁴", "1.58 × 10²", "1.58 × 10²", "1.58 × 10⁻⁴"],
+                    correct: 3,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Which of the following are products of hydrolysis of lactose?",
+                    options: [
+                        "Glucose and fructose",
+                        "Glucose and galactose", 
+                        "Glucose and mannose",
+                        "Glucose and maltose"
+                    ],
+                    correct: 1,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "At 40°C, the volume of a gas was 1.2 m³, at what temperature will the gas occupy a volume of 2.5 m³ when heated under constant pressure?",
+                    options: ["313K", "652K", "320K", "330K"],
+                    correct: 1,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "In a 500 ml volumetric flask, what quantity of Na₂CO₃ would be required to prepare a 2.5M solution? [Na = 23; C = 12; O = 16]",
+                    options: ["106 g", "212 g", "265 g", "132.5 g"],
+                    correct: 3,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "The relationship between Gibbs' free energy (G), enthalpy (H), and entropy (S) is represented as follows",
+                    options: [
+                        "ΔH = TΔS - ΔG",
+                        "ΔG = TΔS - ΔH", 
+                        "ΔG = ΔH - TΔS",
+                        "ΔS = TΔH - ΔG"
+                    ],
+                    correct: 2,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Which of the following signifies that a reaction is at equilibrium",
+                    options: ["Positive ΔG", "Negative ΔG", "Positive ΔS", "Zero ΔG"],
+                    correct: 3,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "7.8g of NaNO₃ was dissolved in 100 ml of water at 25°C. Calculate the solubility of the salt in mol dm⁻³. [Na = 23; N = 14; O = 16]",
+                    options: ["0.918", "0.0918", "22.94", "273.46"],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "Which of the following can be regarded as the strongest bonds between atoms",
+                    options: ["Covalent bonds", "Electrostatic bonds", "Hydrogen bonds", "Van der Waals forces"],
+                    correct: 0,
+                    subject: "Chemistry"
+                },
+                {
+                    question: "A gas occupies a volume of 30 cm³ at a temperature of 26°C and a pressure of 75 cmHg. What volume will it occupy at 70°C and pressure of 120 cmHg.",
+                    options: ["16.34 cm³", "31.20 cm³", "50.48 cm³", "21.51 cm³"],
+                    correct: 3,
+                    subject: "Chemistry"
+                },
+
+                // BIOLOGY 2015 - 7 questions
+                {
+                    question: "Which of the following is not a function of the human blood",
+                    options: ["Defense", "Transport", "Hemostasis", "Cellular respiration"],
+                    correct: 3,
+                    subject: "Biology"
+                },
+                {
+                    question: "Which is these cell organelles is responsible for cellular respiration",
+                    options: ["Golgi bodies", "Nucleus", "Mitochondria", "Ribosomes"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "In blood transfusion a universal donor has the following blood group",
+                    options: ["AB negative", "AB positive", "O negative", "O positive"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "The following animal has a heterodont dentition",
+                    options: ["Tilapia", "Toad", "Sheep", "Lizard"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "The following is not a plant hormones",
+                    options: ["Gibberillins", "Ethylene", "Cytokines", "Abscisic acid"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "Which of the following is not a communicable disease",
+                    options: ["Tuberculosis", "Measles", "Diabetes", "Common cold"],
+                    correct: 2,
+                    subject: "Biology"
+                },
+                {
+                    question: "The following hormone is responsible for lowering blood glucose levels",
+                    options: ["Glucagon", "Thyroxine", "Insulin", "Adrenaline"],
+                    correct: 2,
+                    subject: "Biology"
+                }
+            ]
+        };
+
+        // Quiz State Management
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+        let timer;
+        let timeLeft = 3600; // 60 minutes in seconds
+        let currentYear = '';
+
+        const API_URL = 'http://localhost:5000/api';
+
+        // Check authentication
+        const token = localStorage.getItem('token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Initialize quiz
+        function initializeQuiz() {
+            currentYear = localStorage.getItem('currentTestYear') || '2022';
+            currentQuestions = questionsDB[currentYear] || [];
+            
+            if (currentQuestions.length === 0) {
+                showNoQuestions();
+                return;
+            }
+
+            // Reset quiz state
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            timeLeft = 3600; // Reset timer to 60 minutes
+
+            // Update UI
+            document.getElementById('quizYear').textContent = `Year: ${currentYear}`;
+            document.getElementById('questionCount').textContent = `Questions: ${currentQuestions.length}`;
+            
+            // Start timer and display first question
+            startTimer();
+            displayQuestion();
+        }
+
+        function showNoQuestions() {
+            document.getElementById('quiz-content').innerHTML = `
+                <div class="no-questions">
+                    <h3>📝 No Questions Available</h3>
+                    <p>Questions for ${currentYear} are not available in the database.</p>
+                    <p>Please select another year from the dashboard.</p>
+                    <button class="btn btn-primary" onclick="goToDashboard()" style="margin-top: 20px;">
+                        ← Back to Dashboard
+                    </button>
+                </div>
+            `;
+        }
+
+        function displayQuestion() {
+            if (!currentQuestions.length) return;
+
+            const question = currentQuestions[currentQuestionIndex];
+            const progress = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+
+            document.getElementById('quiz-content').innerHTML = `
+                <div class="question-container">
+                    <div class="question-header">
+                        <div class="question-info">
+                            <div class="question-number">Question ${currentQuestionIndex + 1}/${currentQuestions.length}</div>
+                            <div class="question-subject">${question.subject}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${progress}%"></div>
+                    </div>
+                    
+                    <div class="question-text">${question.question}</div>
+                    
+                    <div class="options">
+                        ${question.options.map((option, index) => `
+                            <div class="option" onclick="selectOption(${index})">
+                                <div class="option-label">${String.fromCharCode(65 + index)}</div>
+                                <div>${option}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="controls">
+                        <button class="btn btn-warning" onclick="previousQuestion()" 
+                                ${currentQuestionIndex === 0 ? 'style="visibility:hidden"' : ''}>
+                            ← Previous
+                        </button>
+                        <button class="btn btn-success" onclick="showAnswer()">Show Answer</button>
+                        <button class="btn btn-primary" onclick="nextQuestion()">
+                            ${currentQuestionIndex === currentQuestions.length - 1 ? 'Finish Quiz' : 'Next →'}
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            // Restore previous selection if exists
+            if (userAnswers[currentQuestionIndex] !== undefined) {
+                selectOption(userAnswers[currentQuestionIndex], true);
+            }
+        }
+
+        function selectOption(optionIndex, silent = false) {
+            if (!silent) {
+                // Remove previous selections
+                document.querySelectorAll('.option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Add selection to clicked option
+                document.querySelectorAll('.option')[optionIndex].classList.add('selected');
+                
+                // Store user's answer
+                userAnswers[currentQuestionIndex] = optionIndex;
+            } else {
+                // Silent selection (for restoring previous answers)
+                document.querySelectorAll('.option')[optionIndex].classList.add('selected');
+            }
+        }
+
+        function showAnswer() {
+            const question = currentQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            
+            options.forEach((option, index) => {
+                option.classList.remove('selected');
+                if (index === question.correct) {
+                    option.classList.add('correct');
+                } else if (userAnswers[currentQuestionIndex] === index) {
+                    option.classList.add('wrong');
+                }
+            });
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex === currentQuestions.length - 1) {
+                finishQuiz();
+                return;
+            }
+            
+            currentQuestionIndex++;
+            displayQuestion();
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        }
+
+        function finishQuiz() {
+            clearInterval(timer);
+            
+            // Calculate score
+            score = 0;
+            for (let i = 0; i < currentQuestions.length; i++) {
+                if (userAnswers[i] === currentQuestions[i].correct) {
+                    score++;
+                }
+            }
+
+            const percentage = Math.round((score / currentQuestions.length) * 100);
+            
+            // Save score to backend
+            saveScore(score, currentQuestions.length);
+
+            // Display results
+            document.getElementById('quiz-content').innerHTML = `
+                <div class="score-display">
+                    <h3>🎉 Quiz Completed!</h3>
+                    <p>You scored ${score} out of ${currentQuestions.length} questions (${percentage}%)</p>
+                    <p>Time taken: ${formatTime(3600 - timeLeft)}</p>
+                    <p>Year: ${currentYear} | Questions: ${currentQuestions.length}</p>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value">${score}</div>
+                        <div class="stat-label">Correct Answers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${currentQuestions.length - score}</div>
+                        <div class="stat-label">Wrong Answers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${percentage}%</div>
+                        <div class="stat-label">Accuracy</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${formatTime(3600 - timeLeft)}</div>
+                        <div class="stat-label">Time Used</div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 30px;">
+                    <button class="btn btn-primary" onclick="goToDashboard()" style="margin: 10px;">
+                        📊 View Dashboard
+                    </button>
+                    <button class="btn btn-warning" onclick="retakeQuiz()" style="margin: 10px;">
+                        🔄 Retake Quiz
+                    </button>
+                    <button class="btn btn-success" onclick="reviewAnswers()" style="margin: 10px;">
+                        📝 Review Answers
+                    </button>
+                </div>
+            `;
+        }
+
+        function reviewAnswers() {
+            currentQuestionIndex = 0;
+            displayQuestion();
+        }
+
+        function retakeQuiz() {
+            initializeQuiz();
+        }
+
+        function goToDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+
+        async function saveScore(userScore, totalQuestions) {
+            try {
+                const response = await fetch(`${API_URL}/save-score`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        year: currentYear,
+                        subject: 'All Subjects',
+                        score: userScore,
+                        total: totalQuestions
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    console.log('✅ Score saved successfully');
+                } else {
+                    console.error('❌ Failed to save score:', data.message);
+                }
+            } catch (error) {
+                console.error('❌ Error saving score:', error);
+            }
+        }
+
+        function startTimer() {
+            timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').textContent = `Time: ${formatTime(timeLeft)}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        function formatTime(seconds) {
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            const secs = seconds % 60;
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Initialize the quiz when page loads
+        window.addEventListener('load', initializeQuiz);
+    </script>
+</body>
+</html>
