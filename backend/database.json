@@ -7,6 +7,14 @@
       "password": "$2a$10$EtTdaN2WqfsVuIj9OfdeAO.HAOBIowWQwdvQ75..YlU/OTIxR2nCC",
       "scores": [],
       "createdAt": "2025-09-25T15:50:38.771Z"
+    },
+    {
+      "id": "1758900385409",
+      "name": "oladele charles",
+      "email": "oladelec10@gmail.com",
+      "password": "$2a$10$rk/Fl7h78uYRA89UAiFFIe6MGF6Q6dJZ.w9xJSiS7hJm8AXwXZHaS",
+      "scores": [],
+      "createdAt": "2025-09-26T15:26:25.409Z"
     }
   ]
 }

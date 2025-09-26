@@ -1,16 +1,19 @@
 {
-  "name": "unimed-app",
+  "name": "unimed-backend",
   "version": "1.0.0",
-  "description": "UNIMED Past Questions Full App",
-  "main": "backend/server.js",
+  "description": "UNIMED Past Questions Backend",
+  "main": "server.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "node backend/server.js"
+    "start": "node server.js",
+    "dev": "node server.js"
   },
   "dependencies": {
     "express": "^4.18.2",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.0",
     "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }
