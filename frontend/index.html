@@ -216,14 +216,14 @@
     </div>
 
     <script>
-        const API_URL = 'https://unimed-backend.onrender.com/api';
+        const API_URL = 'https://unimed-app.onrender.com/api';
         // Check if user is already logged in
         if (localStorage.getItem('token')) {
             window.location.href = 'dashboard.html';
         }
         
         console.log('🚀 UNIMED Past Questions Platform Loaded');
-        console.log('📍 Make sure backend is running on http://localhost:5000');
+        console.log('Backend URL:', API_URL);
     </script>
 </body>
 </html>

@@ -209,7 +209,7 @@
     </div>
 
     <script>
-        const API_URL = 'https://unimed-backend.onrender.com/api';
+        const API_URL = 'https://unimed-app.onrender.com/api';
         // Check if already logged in
         if (localStorage.getItem('token')) {
             window.location.href = 'dashboard.html';
@@ -311,7 +311,7 @@
                 console.log('✅ Backend connection successful:', data.message);
             } catch (error) {
                 console.error('❌ Backend connection failed:', error);
-                showMessage('⚠️ Backend server not running. Please start the server on localhost:5000', 'error');
+                showMessage('⚠️ Backend server not running. Please check connection', 'error');
             }
         });
     </script>
