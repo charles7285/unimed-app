@@ -49,17 +49,14 @@ app.post('/api/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
     
-    // Check if user exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: 'User already exists' });
     }
     
-    // Hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     
-    // Create user
     const newUser = new User({
       name,
       email,
@@ -68,7 +65,6 @@ app.post('/api/register', async (req, res) => {
     
     await newUser.save();
     
-    // Create token
     const token = jwt.sign({ userId: newUser._id }, JWT_SECRET);
     
     res.status(201).json({
@@ -164,7 +160,8 @@ app.get('/api/scores', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+// FIXED: Bind to 0.0.0.0 for Render
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Server running on port ${PORT}`);
   console.log(`💾 Using MongoDB Atlas database`);
 });
