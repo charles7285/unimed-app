@@ -8,7 +8,8 @@ const mongoose = require('mongoose');
 const app = express();
 
 // Environment variables
-const JWT_SECRET = process.env.JWT_SECRET || 'unimed-secret-key';
+const MONGODB_URI = process.env.MONGODB_URI;
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret';
 const PORT = process.env.PORT || 5000;
 
 // Middleware
@@ -16,8 +17,6 @@ app.use(express.json());
 app.use(cors());
 
 // MongoDB Connection
-const MONGODB_URI = 'mongodb+srv://unimed-app:Paulgold1@cluster0.wc1uvaf.mongodb.net/unimeddb?retryWrites=true&w=majority&appName=Cluster0';
-
 mongoose.connect(MONGODB_URI)
   .then(() => console.log('✅ Connected to MongoDB Atlas'))
   .catch(err => console.error('❌ MongoDB connection error:', err));
